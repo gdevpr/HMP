@@ -4,13 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Healthy Eating Plan</title>
-
-<!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f766e">
 <meta name="mobile-web-app-capable" content="yes">
-
-<!-- iOS PWA -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Eat Plan">
@@ -42,13 +38,13 @@
     --shadow-lg: 0 10px 25px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
     --radius: 8px;
     --radius-sm: 6px;
+    --nav-h: 60px;
   }
 
   * { box-sizing: border-box; }
 
   html, body {
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -56,6 +52,7 @@
     line-height: 1.5;
   }
 
+  /* ── Header ── */
   header {
     position: sticky;
     top: 0;
@@ -63,20 +60,20 @@
     border-bottom: 1px solid var(--border);
     z-index: 100;
     box-shadow: var(--shadow);
+    padding-top: env(safe-area-inset-top);
   }
 
   .header-row {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 12px 16px;
+    padding: 10px 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
     color: var(--primary);
     margin: 0;
@@ -88,48 +85,43 @@
     color: var(--primary);
     font-size: 11px;
     font-weight: 600;
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 999px;
     cursor: help;
     white-space: nowrap;
+    display: none;
   }
+
+  @media (min-width: 480px) { .badge-5in3out { display: inline; } }
 
   .search-wrap {
     flex: 1;
-    min-width: 200px;
+    min-width: 0;
     position: relative;
   }
 
   .search-input {
     width: 100%;
-    padding: 8px 12px 8px 36px;
+    padding: 8px 12px 8px 34px;
     border: 1px solid var(--border);
     border-radius: var(--radius);
     font-size: 14px;
     background: var(--bg);
+    font-family: inherit;
   }
-
-  .search-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: var(--surface);
-  }
+  .search-input:focus { outline: none; border-color: var(--primary); background: var(--surface); }
 
   .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
+    position: absolute; left: 11px; top: 50%;
     transform: translateY(-50%);
-    color: var(--text-muted);
-    font-size: 14px;
-    pointer-events: none;
+    color: var(--text-muted); font-size: 14px; pointer-events: none;
   }
 
   .toolbar-btn {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 8px 14px;
+    padding: 0 14px;
     cursor: pointer;
     font-size: 13px;
     font-weight: 500;
@@ -137,90 +129,113 @@
     align-items: center;
     gap: 6px;
     color: var(--text);
+    height: 36px;
+    font-family: inherit;
+    white-space: nowrap;
   }
-
   .toolbar-btn:hover { background: var(--bg); }
-
   .toolbar-btn .count {
-    background: var(--primary);
-    color: white;
-    border-radius: 999px;
-    padding: 1px 6px;
-    font-size: 11px;
-    font-weight: 700;
-    min-width: 18px;
-    text-align: center;
+    background: var(--primary); color: white;
+    border-radius: 999px; padding: 1px 6px;
+    font-size: 11px; font-weight: 700; min-width: 18px; text-align: center;
   }
 
+  /* filter row */
   .filter-row {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 16px 10px;
+    padding: 0 16px 8px;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    align-items: center;
   }
+
+  .filter-toggle-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0 12px;
+    height: 32px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: inherit;
+    touch-action: manipulation;
+  }
+  .filter-toggle-btn.has-active {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .filter-chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .filter-chips-wrap.collapsed { display: none; }
 
   .filter-chip {
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 999px;
-    padding: 4px 12px;
+    padding: 0 12px;
+    height: 30px;
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     color: var(--text-muted);
     user-select: none;
+    display: inline-flex;
+    align-items: center;
+    font-family: inherit;
+    touch-action: manipulation;
   }
-
   .filter-chip:hover { border-color: var(--text-muted); }
-
-  .filter-chip.active {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: white;
-  }
-
+  .filter-chip.active { background: var(--primary); border-color: var(--primary); color: white; }
   .filter-chip.cat-carb.active { background: var(--carb); border-color: var(--carb); }
   .filter-chip.cat-protein.active { background: var(--protein); border-color: var(--protein); }
   .filter-chip.cat-fruit.active { background: var(--fruit); border-color: var(--fruit); }
   .filter-chip.cat-vegetable.active { background: var(--vegetable); border-color: var(--vegetable); }
   .filter-chip.cat-fat.active { background: var(--fat); border-color: var(--fat); }
 
+  /* desktop tabs */
   .tabs {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 16px;
     display: flex;
-    gap: 4px;
+    gap: 2px;
     overflow-x: auto;
     border-bottom: 1px solid var(--border);
     background: var(--surface);
+    scrollbar-width: none;
   }
-
-  .tabs::-webkit-scrollbar { height: 4px; }
-  .tabs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .tabs::-webkit-scrollbar { display: none; }
 
   .tab {
     background: transparent;
     border: none;
     border-bottom: 2px solid transparent;
-    padding: 12px 16px;
+    padding: 10px 14px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--text-muted);
     white-space: nowrap;
     font-family: inherit;
+    touch-action: manipulation;
   }
-
   .tab:hover { color: var(--text); }
-  .tab.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: 600;
-  }
+  .tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
 
+  /* layout */
   .layout {
     max-width: 1400px;
     margin: 0 auto;
@@ -229,45 +244,28 @@
     grid-template-columns: 1fr;
     gap: 16px;
   }
-
   @media (min-width: 1024px) {
     .layout { grid-template-columns: 1fr 360px; }
   }
-
   main { min-width: 0; }
 
-  .section-header {
-    margin: 0 0 8px;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .section-sub {
-    color: var(--text-muted);
-    font-size: 13px;
-    margin: 0 0 16px;
-  }
+  /* section */
+  .section-header { margin: 0 0 8px; font-size: 18px; font-weight: 700; }
+  .section-sub { color: var(--text-muted); font-size: 13px; margin: 0 0 16px; }
 
   .meal-targets {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 12px 16px;
+    padding: 10px 14px;
     margin-bottom: 16px;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     font-size: 13px;
   }
 
-  .target-chip {
-    background: var(--bg);
-    border-radius: var(--radius-sm);
-    padding: 4px 10px;
-    font-weight: 500;
-  }
-
+  .target-chip { background: var(--bg); border-radius: var(--radius-sm); padding: 3px 10px; font-weight: 500; }
   .target-chip.cat-carb { background: var(--carb-light); color: var(--carb); }
   .target-chip.cat-protein { background: var(--protein-light); color: var(--protein); }
   .target-chip.cat-fruit { background: var(--fruit-light); color: var(--fruit); }
@@ -275,27 +273,13 @@
   .target-chip.cat-fat { background: var(--fat-light); color: var(--fat); }
 
   .category-block { margin-bottom: 28px; }
-
-  .category-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0 0 10px;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-  }
+  .category-title { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 15px; font-weight: 600; }
 
   .category-pill {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    display: inline-block; font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.05em;
   }
-
   .category-pill.cat-carb { background: var(--carb-light); color: var(--carb); }
   .category-pill.cat-protein { background: var(--protein-light); color: var(--protein); }
   .category-pill.cat-fruit { background: var(--fruit-light); color: var(--fruit); }
@@ -309,6 +293,7 @@
     gap: 8px;
   }
 
+  /* item card */
   .item-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -319,104 +304,50 @@
     gap: 8px;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
+  .item-card:hover { border-color: #cbd5e1; box-shadow: var(--shadow); }
 
-  .item-card:hover {
-    border-color: #cbd5e1;
-    box-shadow: var(--shadow);
-  }
-
-  .item-card.has-fav { border-color: #fbbf24; }
-
-  .item-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .item-name {
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 1.35;
-    color: var(--text);
-    flex: 1;
-  }
-
+  .item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .item-name { font-weight: 600; font-size: 14px; line-height: 1.35; flex: 1; }
   .item-portion {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 500;
-    white-space: nowrap;
-    background: var(--bg);
-    padding: 2px 8px;
-    border-radius: 999px;
+    font-size: 12px; color: var(--text-muted); font-weight: 500;
+    white-space: nowrap; background: var(--bg); padding: 2px 8px; border-radius: 999px;
   }
 
   .item-brand {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    background: #1e293b;
-    color: white;
-    padding: 2px 6px;
+    display: inline-block; font-size: 10px; font-weight: 700;
+    background: #1e293b; color: white; padding: 2px 6px;
+    border-radius: 4px; margin-right: 4px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+
+  .item-manual {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    background: #f1f5f9; color: #64748b; padding: 2px 6px;
     border-radius: 4px;
-    margin-right: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    text-transform: uppercase; letter-spacing: 0.04em;
   }
 
-  .item-override {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    background: var(--warn-light);
-    color: var(--warn);
-    padding: 2px 6px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
+  .item-note { font-size: 12px; color: var(--text-muted); font-style: italic; }
 
-  .item-note {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-style: italic;
-  }
-
-  .item-actions {
-    display: flex;
-    gap: 6px;
-    margin-top: auto;
-  }
+  .item-actions { display: flex; gap: 6px; margin-top: auto; }
 
   .action-btn {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-family: inherit;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 0 10px;
+    cursor: pointer; font-size: 12px; font-weight: 500; color: var(--text);
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: inherit; min-height: 36px; touch-action: manipulation;
   }
-
   .action-btn:hover { background: var(--surface); border-color: var(--text-muted); }
   .action-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
-  .action-btn.fav.active { background: #fbbf24; border-color: #fbbf24; color: white; }
   .action-btn.shop.active { background: #06b6d4; border-color: #06b6d4; color: white; }
 
   .action-btn-add {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: white;
-    margin-left: auto;
+    background: var(--primary); border-color: var(--primary); color: white; margin-left: auto;
   }
   .action-btn-add:hover { background: #0d6661; border-color: #0d6661; }
 
+  /* panel */
   .panel {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -424,202 +355,291 @@
     padding: 16px;
     box-shadow: var(--shadow);
   }
-
   @media (min-width: 1024px) {
-    .panel-wrap {
-      position: sticky;
-      top: 140px;
-      align-self: start;
-    }
+    .panel-wrap { position: sticky; top: 140px; align-self: start; }
   }
 
-  .panel-tabs {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-
+  .panel-tabs { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid var(--border); }
   .panel-tab {
-    background: none;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-muted);
-    border-bottom: 2px solid transparent;
-    font-family: inherit;
+    background: none; border: none; padding: 8px 12px;
+    cursor: pointer; font-size: 13px; font-weight: 500;
+    color: var(--text-muted); border-bottom: 2px solid transparent;
+    font-family: inherit; touch-action: manipulation;
   }
+  .panel-tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
 
-  .panel-tab.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: 600;
-  }
-
-  .meal-target-row {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-
-  .meal-progress {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-  }
-
-  .meal-progress .label {
-    font-weight: 600;
-    min-width: 80px;
-  }
-
-  .meal-progress .bar {
-    flex: 1;
-    height: 6px;
-    background: var(--bg);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .meal-progress .fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.3s;
-  }
-
+  .meal-target-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .meal-progress { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .meal-progress .label { font-weight: 600; min-width: 80px; }
+  .meal-progress .bar { flex: 1; height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+  .meal-progress .fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
   .meal-progress.cat-carb .fill { background: var(--carb); }
   .meal-progress.cat-protein .fill { background: var(--protein); }
   .meal-progress.cat-fruit .fill { background: var(--fruit); }
   .meal-progress.cat-vegetable .fill { background: var(--vegetable); }
   .meal-progress.cat-fat .fill { background: var(--fat); }
+  .meal-progress .nums { font-size: 12px; font-weight: 500; color: var(--text-muted); min-width: 50px; text-align: right; }
+  .meal-progress .nums.complete { color: var(--vegetable); font-weight: 700; }
 
-  .meal-progress .nums {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    min-width: 50px;
-    text-align: right;
-  }
-
-  .meal-progress .nums.complete {
-    color: var(--vegetable);
-    font-weight: 700;
-  }
-
-  .meal-selector { margin-bottom: 14px; }
-
+  .meal-selector { margin-bottom: 12px; }
   .meal-selector select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 13px;
-    font-family: inherit;
-    background: var(--bg);
+    width: 100%; padding: 8px 12px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    font-size: 13px; font-family: inherit; background: var(--bg);
   }
 
-  .panel-list {
-    max-height: 320px;
-    overflow-y: auto;
-    margin-top: 10px;
-  }
-
+  .panel-list { max-height: 280px; overflow-y: auto; margin-top: 8px; }
   .panel-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 8px; border-radius: var(--radius-sm); font-size: 13px;
   }
-
   .panel-item:hover { background: var(--bg); }
-
-  .panel-item .name {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .panel-item .portion {
-    font-size: 11px;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
+  .panel-item .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .panel-item .portion { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
 
   .panel-item-remove {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 16px;
-    padding: 0 4px;
-    line-height: 1;
-    font-family: inherit;
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 16px; padding: 0 4px; line-height: 1; font-family: inherit;
   }
-
   .panel-item-remove:hover { color: var(--protein); }
 
-  .empty-state {
-    text-align: center;
-    color: var(--text-muted);
-    padding: 24px 8px;
-    font-size: 13px;
-  }
+  .empty-state { text-align: center; color: var(--text-muted); padding: 24px 8px; font-size: 13px; }
 
   .clear-all {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 6px;
-    cursor: pointer;
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 8px;
-    font-family: inherit;
+    width: 100%; background: var(--bg);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 6px; cursor: pointer; font-size: 12px; color: var(--text-muted);
+    margin-top: 8px; font-family: inherit;
   }
-
   .clear-all:hover { color: var(--protein); border-color: var(--protein); }
 
+  /* save meal form */
+  .save-meal-form {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .save-meal-form label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+  .save-meal-input {
+    width: 100%; padding: 7px 10px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    font-size: 13px; font-family: inherit; background: var(--bg);
+  }
+  .save-meal-input:focus { outline: none; border-color: var(--primary); }
+  .save-meal-btn {
+    background: var(--primary); color: white; border: none;
+    border-radius: var(--radius); padding: 8px 14px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: inherit; touch-action: manipulation;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .save-meal-btn:hover { background: #0d6661; }
+
+  /* My Meals page */
+  .my-meals-section { margin-bottom: 28px; }
+  .my-meals-type-header {
+    font-size: 15px; font-weight: 700; color: var(--text);
+    margin: 0 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .saved-meal-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+  }
+  .saved-meal-info { flex: 1; min-width: 0; }
+  .saved-meal-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .saved-meal-items { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .saved-meal-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+  .load-meal-btn {
+    background: var(--primary); color: white; border: none;
+    border-radius: var(--radius-sm); padding: 5px 12px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: inherit; touch-action: manipulation;
+  }
+  .load-meal-btn:hover { background: #0d6661; }
+  .delete-meal-btn {
+    background: none; border: 1px solid var(--border); color: var(--text-muted);
+    border-radius: var(--radius-sm); padding: 5px 10px;
+    font-size: 12px; cursor: pointer; font-family: inherit; touch-action: manipulation;
+  }
+  .delete-meal-btn:hover { color: var(--protein); border-color: var(--protein); }
+
+  /* snacks, pantry, rules */
+  .combo-list, .approved-list { display: grid; gap: 8px; }
+  .combo-card, .approved-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 10px 14px; font-size: 13px;
+  }
+  .combo-card { display: flex; align-items: center; gap: 10px; }
+  .combo-bullet { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+
+  .approved-group { margin-bottom: 22px; }
+  .approved-group h4 {
+    font-size: 13px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 8px;
+  }
+  .approved-card { display: flex; align-items: center; gap: 8px; }
+  .approved-card .approved-name { flex: 1; font-weight: 500; }
+  .approved-card .approved-note { font-size: 12px; color: var(--text-muted); font-style: italic; }
+
+  .pantry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .pantry-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+  .pantry-section h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700; color: var(--pantry); }
+  .pantry-section ul { margin: 0; padding: 0; list-style: none; }
+  .pantry-section li { padding: 4px 0; font-size: 13px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .pantry-section li:last-child { border-bottom: none; }
+  .pantry-check {
+    background: none; border: 1px solid var(--border); border-radius: 4px;
+    width: 20px; height: 20px; cursor: pointer; flex-shrink: 0; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: inherit; color: transparent; touch-action: manipulation;
+  }
+  .pantry-check.checked { background: #06b6d4; border-color: #06b6d4; color: white; }
+
+  .rules-page { display: grid; gap: 16px; }
+  .rule-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+  .rule-block h2 { margin: 0 0 12px; color: var(--primary); font-size: 18px; }
+  .rule-block h3 { margin: 14px 0 8px; font-size: 14px; }
+  .rule-block ul { margin: 6px 0; padding-left: 22px; }
+  .rule-block li { margin: 4px 0; font-size: 14px; }
+
+  .in-out-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  @media (max-width: 600px) { .in-out-grid { grid-template-columns: 1fr; } }
+  .in-out-card { border-radius: var(--radius); padding: 14px; }
+  .in-out-card.in-card { background: var(--vegetable-light); border: 1px solid var(--vegetable); }
+  .in-out-card.out-card { background: var(--protein-light); border: 1px solid var(--protein); }
+  .in-out-card h3 { margin: 0 0 8px; font-size: 16px; }
+  .in-out-card.in-card h3 { color: var(--vegetable); }
+  .in-out-card.out-card h3 { color: var(--protein); }
+  .sugar-names { columns: 2; column-gap: 14px; margin: 0; padding-left: 20px; font-size: 13px; }
+  @media (max-width: 600px) { .sugar-names { columns: 1; } }
+
+  /* toast */
+  .toast {
+    position: fixed; bottom: 80px; left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b; color: white;
+    padding: 10px 18px; border-radius: 999px;
+    font-size: 13px; font-weight: 500;
+    opacity: 0; transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none; z-index: 1000;
+    box-shadow: var(--shadow-lg);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+
+  .empty {
+    text-align: center; color: var(--text-muted);
+    padding: 32px; background: var(--surface);
+    border: 1px dashed var(--border); border-radius: var(--radius); font-size: 14px;
+  }
+
+  /* ── Bottom Nav (mobile) ── */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    z-index: 101;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.07);
+  }
+  .bottom-nav-inner { display: flex; height: var(--nav-h); }
+
+  .bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    background: none; border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: inherit;
+    touch-action: manipulation;
+    padding: 6px 4px 4px;
+  }
+  .bottom-nav-item .nav-icon { font-size: 22px; line-height: 1; }
+  .bottom-nav-item .nav-label { font-size: 10px; font-weight: 500; line-height: 1; }
+  .bottom-nav-item.active { color: var(--primary); }
+  .bottom-nav-item.active .nav-label { font-weight: 700; }
+
+  /* ── More Drawer ── */
+  .more-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 150;
+  }
+  .more-overlay.open { display: block; }
+
+  .more-sheet {
+    position: absolute;
+    bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
+    left: 0; right: 0;
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    padding: 20px 16px 8px;
+    box-shadow: var(--shadow-lg);
+  }
+  .more-sheet-title {
+    font-size: 11px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
+  }
+  .more-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 8px; border-radius: var(--radius);
+    cursor: pointer; font-size: 15px; font-weight: 500;
+    border: none; background: none; width: 100%; text-align: left;
+    font-family: inherit; color: var(--text); min-height: 50px;
+    touch-action: manipulation;
+  }
+  .more-item:active { background: var(--bg); }
+  .more-item .more-icon { font-size: 22px; width: 32px; text-align: center; }
+
+  /* FAB */
   .mobile-fab {
     display: none;
     position: fixed;
-    bottom: 16px;
     right: 16px;
     background: var(--primary);
-    color: white;
-    border: none;
+    color: white; border: none;
     border-radius: 999px;
-    padding: 12px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: var(--shadow-lg);
+    padding: 0 20px;
+    height: 48px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; box-shadow: var(--shadow-lg);
     z-index: 50;
-    align-items: center;
-    gap: 8px;
+    align-items: center; gap: 8px;
     font-family: inherit;
+    touch-action: manipulation;
   }
 
+  /* ── Mobile panel slide-up ── */
   @media (max-width: 1023px) {
-    .mobile-fab { display: inline-flex; }
-  }
+    .tabs { display: none; }
+    .bottom-nav { display: flex; flex-direction: column; }
+    .mobile-fab {
+      display: inline-flex;
+      bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 12px);
+    }
+    .toast {
+      bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 16px);
+    }
+    body { padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom)); }
 
-  @media (max-width: 1023px) {
     .panel-wrap.mobile-hidden { display: none; }
     .panel-wrap.mobile-shown {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: 60px;
+      bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
+      left: 0; right: 0; top: 0;
       z-index: 99;
       background: rgba(0,0,0,0.4);
       padding: 0;
@@ -630,300 +650,53 @@
       width: 100%;
       max-height: 85vh;
       overflow-y: auto;
-      border-radius: 16px 16px 0 0;
+      border-radius: 20px 20px 0 0;
     }
   }
 
-  .combo-list, .approved-list { display: grid; gap: 8px; }
-
-  .combo-card, .approved-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 14px;
-    font-size: 13px;
-  }
-
-  .combo-card { display: flex; align-items: center; gap: 10px; }
-
-  .combo-bullet {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--primary);
-    flex-shrink: 0;
-  }
-
-  .approved-group { margin-bottom: 22px; }
-
-  .approved-group h4 {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0 0 8px;
-  }
-
-  .approved-card { display: flex; align-items: center; gap: 8px; }
-
-  .approved-card .approved-name { flex: 1; font-weight: 500; }
-
-  .approved-card .approved-note {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-style: italic;
-  }
-
-  .pantry-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
-  }
-
-  .pantry-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px;
-  }
-
-  .pantry-section h3 {
-    margin: 0 0 8px;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--pantry);
-  }
-
-  .pantry-section ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .pantry-section li {
-    padding: 4px 0;
-    font-size: 13px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .pantry-section li:last-child { border-bottom: none; }
-
-  .pantry-section li .pantry-check {
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    flex-shrink: 0;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: inherit;
-    color: transparent;
-  }
-
-  .pantry-section li .pantry-check.checked {
-    background: #06b6d4;
-    border-color: #06b6d4;
-    color: white;
-  }
-
-  .rules-page { display: grid; gap: 16px; }
-
-  .rule-block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px;
-  }
-
-  .rule-block h2 {
-    margin: 0 0 12px;
-    color: var(--primary);
-    font-size: 18px;
-  }
-
-  .rule-block h3 {
-    margin: 14px 0 8px;
-    font-size: 14px;
-    color: var(--text);
-  }
-
-  .rule-block ul {
-    margin: 6px 0;
-    padding-left: 22px;
-  }
-
-  .rule-block li {
-    margin: 4px 0;
-    font-size: 14px;
-  }
-
-  .in-out-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  @media (max-width: 600px) {
-    .in-out-grid { grid-template-columns: 1fr; }
-  }
-
-  .in-out-card {
-    border-radius: var(--radius);
-    padding: 14px;
-  }
-
-  .in-out-card.in-card { background: var(--vegetable-light); border: 1px solid var(--vegetable); }
-  .in-out-card.out-card { background: var(--protein-light); border: 1px solid var(--protein); }
-
-  .in-out-card h3 { margin: 0 0 8px; font-size: 16px; }
-
-  .in-out-card.in-card h3 { color: var(--vegetable); }
-  .in-out-card.out-card h3 { color: var(--protein); }
-
-  .sugar-names {
-    columns: 2;
-    column-gap: 14px;
-    margin: 0;
-    padding-left: 20px;
-    font-size: 13px;
-  }
-
-  @media (max-width: 600px) { .sugar-names { columns: 1; } }
-
-  .toast {
-    position: fixed;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1e293b;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 500;
-    opacity: 0;
-    transition: opacity 0.25s, transform 0.25s;
-    pointer-events: none;
-    z-index: 1000;
-    box-shadow: var(--shadow-lg);
-  }
-
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-6px);
-  }
-
-  .empty {
-    text-align: center;
-    color: var(--text-muted);
-    padding: 32px;
-    background: var(--surface);
-    border: 1px dashed var(--border);
-    border-radius: var(--radius);
-    font-size: 14px;
-  }
-
-  @media print {
-    header, .mobile-fab, .panel-wrap, .item-actions, .filter-row { display: none !important; }
-    .layout { display: block; }
-    .item-card { break-inside: avoid; box-shadow: none; }
-  }
-
-  footer {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 12px;
-    padding: 30px 16px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  footer a { color: var(--primary); }
-
-  /* ── Mobile / PWA polish ─────────────────────────────── */
-
-  /* Safe-area insets for iPhone notch / Dynamic Island */
-  header {
-    padding-top: env(safe-area-inset-top);
-  }
-  .mobile-fab {
-    bottom: calc(16px + env(safe-area-inset-bottom));
-    right: calc(16px + env(safe-area-inset-right));
-  }
-
-  /* 44px minimum touch targets (Apple HIG) */
-  .action-btn, .toolbar-btn, .filter-chip,
-  .tab, .panel-tab, .pantry-check,
-  .panel-item-remove, .clear-all {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .filter-chip { padding: 0 14px; }
-  .tab { padding: 0 16px; }
-
-  /* Prevent iOS double-tap zoom on buttons */
-  button { touch-action: manipulation; }
-
-  /* Larger card tap area on mobile */
+  /* mobile card sizing */
   @media (max-width: 600px) {
     .item-card { padding: 14px; }
     .item-name { font-size: 15px; }
-    .action-btn { font-size: 13px; padding: 0 12px; }
+    .action-btn { font-size: 13px; }
+    .item-grid { grid-template-columns: 1fr; }
   }
 
-  /* Install banner */
+  /* install banner */
   #install-banner {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-    z-index: 200;
+    display: none; position: fixed;
+    bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
+    left: 0; right: 0;
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 12px 16px; z-index: 200;
     box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
-    align-items: center;
-    gap: 12px;
-    font-size: 14px;
+    align-items: center; gap: 12px; font-size: 14px;
   }
   #install-banner.visible { display: flex; }
   #install-banner .install-text { flex: 1; }
   #install-banner .install-text strong { display: block; }
   #install-banner .install-text span { color: var(--text-muted); font-size: 12px; }
   #install-btn {
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: var(--radius);
-    padding: 10px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: inherit;
+    background: var(--primary); color: white; border: none;
+    border-radius: var(--radius); padding: 10px 18px;
+    font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: inherit;
   }
   #install-dismiss {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 20px;
-    cursor: pointer;
-    padding: 4px 8px;
-    font-family: inherit;
+    background: none; border: none; color: var(--text-muted);
+    font-size: 20px; cursor: pointer; padding: 4px 8px; font-family: inherit;
   }
 
+  footer {
+    text-align: center; color: var(--text-muted); font-size: 12px;
+    padding: 30px 16px; max-width: 1400px; margin: 0 auto;
+  }
+  footer a { color: var(--primary); }
+
+  @media print {
+    header, .mobile-fab, .panel-wrap, .item-actions, .filter-row, .bottom-nav { display: none !important; }
+    .layout { display: block; }
+    .item-card { break-inside: avoid; box-shadow: none; }
+  }
 </style>
 </head>
 <body>
@@ -931,23 +704,24 @@
 <header>
   <div class="header-row">
     <h1 class="title">Healthy Eating Plan</h1>
-    <span class="badge-5in3out" title="Dr. Casey's framework: 5 IN (omega-3, probiotics, micronutrients, fiber, protein) / 3 OUT (sugar, refined grains, seed oils)">5 IN · 3 OUT</span>
+    <span class="badge-5in3out" title="Dr. Casey's 5 IN / 3 OUT framework">5 IN · 3 OUT</span>
     <div class="search-wrap">
       <span class="search-icon">⌕</span>
-      <input id="searchInput" type="search" class="search-input" placeholder="Search items, brands, categories…">
+      <input id="searchInput" type="search" class="search-input" placeholder="Search foods…">
     </div>
-    <button class="toolbar-btn" id="shopBtn">🛒 Shopping <span class="count" id="shopCount">0</span></button>
-    <button class="toolbar-btn" id="favBtn">♡ Favorites <span class="count" id="favCount">0</span></button>
+    <button class="toolbar-btn" id="shopBtn">🛒 <span class="count" id="shopCount">0</span></button>
   </div>
   <div class="filter-row" id="filterRow"></div>
   <div class="tabs" id="tabs">
     <button class="tab active" data-tab="breakfast">Breakfast</button>
     <button class="tab" data-tab="am_snack">AM Snack</button>
-    <button class="tab" data-tab="lunch_dinner">Lunch &amp; Dinner</button>
+    <button class="tab" data-tab="lunch">Lunch</button>
+    <button class="tab" data-tab="dinner">Dinner</button>
     <button class="tab" data-tab="pm_snack">PM Snack</button>
     <button class="tab" data-tab="pantry">Pantry</button>
     <button class="tab" data-tab="snacks">Approved Snacks</button>
     <button class="tab" data-tab="rules">Casey Rules</button>
+    <button class="tab" data-tab="my_meals">My Meals</button>
   </div>
 </header>
 
@@ -961,10 +735,48 @@
 <footer>
   <p>Portion structure: Lcda. Mariely Rosado MHSN, RD · Healthy Path Markets · 787-403-0789<br>
   Food list: Dr. Casey Means, MD — "Ultimate Food List" © 2023<br>
-  <small>Your favorites, shopping list, and meal builder save automatically in this browser.</small></p>
+  <small>Shopping list and meal builder save automatically in this browser.</small></p>
 </footer>
 
 <button class="mobile-fab" id="mobileFab">🍽 Meal Builder</button>
+
+<!-- Bottom Nav (mobile) -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bottom-nav-inner">
+    <button class="bottom-nav-item active" data-tab="breakfast">
+      <span class="nav-icon">🍳</span>
+      <span class="nav-label">Breakfast</span>
+    </button>
+    <button class="bottom-nav-item" data-tab="lunch">
+      <span class="nav-icon">🥗</span>
+      <span class="nav-label">Lunch</span>
+    </button>
+    <button class="bottom-nav-item" data-tab="dinner">
+      <span class="nav-icon">🍽</span>
+      <span class="nav-label">Dinner</span>
+    </button>
+    <button class="bottom-nav-item" data-tab="my_meals">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">My Meals</span>
+    </button>
+    <button class="bottom-nav-item" id="moreNavBtn">
+      <span class="nav-icon">•••</span>
+      <span class="nav-label">More</span>
+    </button>
+  </div>
+</nav>
+
+<!-- More Drawer -->
+<div class="more-overlay" id="moreOverlay">
+  <div class="more-sheet">
+    <div class="more-sheet-title">More</div>
+    <button class="more-item" data-tab="am_snack"><span class="more-icon">🥤</span> AM Snack</button>
+    <button class="more-item" data-tab="pm_snack"><span class="more-icon">🍎</span> PM Snack</button>
+    <button class="more-item" data-tab="pantry"><span class="more-icon">🫙</span> Pantry</button>
+    <button class="more-item" data-tab="snacks"><span class="more-icon">✅</span> Approved Snacks</button>
+    <button class="more-item" data-tab="rules"><span class="more-icon">📖</span> Casey Rules</button>
+  </div>
+</div>
 
 <div id="install-banner" role="complementary" aria-label="Install app">
   <div class="install-text">
@@ -1304,16 +1116,17 @@ const APPROVED_SNACKS = {
 };
 
 const MEAL_TARGETS = {
-  breakfast: { carb: 2, fruit: 2, protein: 4, fat: 1, label: 'Breakfast', note: '2 carb + 2 fruit + 4 protein, optional 1 fat' },
-  lunch_dinner: { carb: 4, protein: 5, vegetable: 1, fat: 1, label: 'Lunch or Dinner', note: '4 carb + 5 protein + 1 vegetable, optional 1 fat' },
+  breakfast: { carb: 2, fruit: 2, protein: 4, fat: 1, label: 'Breakfast' },
+  lunch: { carb: 4, protein: 5, vegetable: 1, fat: 1, label: 'Lunch' },
+  dinner: { carb: 4, protein: 5, vegetable: 1, fat: 1, label: 'Dinner' },
 };
 
-const STORAGE_KEY = 'mealPlan_v1';
+const STORAGE_KEY = 'mealPlan_v2';
 let state = {
-  favorites: {},
   shopping: {},
-  meal: { type: 'breakfast', items: [] },
+  meal: { type: 'breakfast', items: [], saveName: '' },
   pantryChecked: {},
+  savedMeals: [],
 };
 
 function loadState() {
@@ -1322,21 +1135,20 @@ function loadState() {
     if (saved) {
       const parsed = JSON.parse(saved);
       state = { ...state, ...parsed };
+      if (!state.savedMeals) state.savedMeals = [];
     }
   } catch (e) {}
 }
 
 function saveState() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
 }
 
 let activeTab = 'breakfast';
 let searchTerm = '';
 let activeFilters = new Set();
-let hideOverrides = false;
 let panelView = 'meal';
+let filtersExpanded = false;
 
 function el(tag, attrs, ...children) {
   attrs = attrs || {};
@@ -1367,22 +1179,24 @@ function showToast(msg) {
 function itemMatchesSearch(item) {
   if (!searchTerm) return true;
   const q = searchTerm.toLowerCase();
-  return (
-    item.name.toLowerCase().indexOf(q) !== -1 ||
-    (item.brand && item.brand.toLowerCase().indexOf(q) !== -1) ||
-    (item.note && item.note.toLowerCase().indexOf(q) !== -1) ||
-    item.category.toLowerCase().indexOf(q) !== -1
-  );
+  return item.name.toLowerCase().includes(q) ||
+    (item.brand && item.brand.toLowerCase().includes(q)) ||
+    (item.note && item.note.toLowerCase().includes(q)) ||
+    item.category.toLowerCase().includes(q);
 }
 
 function itemMatchesFilters(item) {
-  if (hideOverrides && item.override) return false;
   if (activeFilters.size === 0) return true;
   return activeFilters.has(item.category);
 }
 
-function getItemsForMeal(meal) {
-  return ITEMS.filter(i => i.meals.indexOf(meal) !== -1 && itemMatchesSearch(i) && itemMatchesFilters(i));
+// both lunch and dinner use 'lunch_dinner' items
+function getMealKey(tab) {
+  return (tab === 'lunch' || tab === 'dinner') ? 'lunch_dinner' : tab;
+}
+
+function getItemsForMeal(mealKey) {
+  return ITEMS.filter(i => i.meals.includes(mealKey) && itemMatchesSearch(i) && itemMatchesFilters(i));
 }
 
 function catLabel(cat) {
@@ -1390,17 +1204,15 @@ function catLabel(cat) {
 }
 
 function makeItemCard(item) {
-  const isFav = !!state.favorites[item.id];
   const isShop = !!state.shopping[item.id];
-
-  return el('div', { class: 'item-card' + (isFav ? ' has-fav' : '') },
+  return el('div', { class: 'item-card' },
     el('div', { class: 'item-top' },
       el('div', { class: 'item-name' }, item.name),
       el('span', { class: 'item-portion' }, item.portion),
     ),
     (item.brand || item.override) ? el('div', {},
       item.brand ? el('span', { class: 'item-brand' }, item.brand) : null,
-      item.override ? el('span', { class: 'item-override' }, '⚠️ Override') : null,
+      item.override ? el('span', { class: 'item-manual' }, '✎ Manual') : null,
     ) : null,
     item.note ? el('div', { class: 'item-note' }, item.note) : null,
     el('div', { class: 'item-actions' },
@@ -1410,21 +1222,13 @@ function makeItemCard(item) {
         onclick: () => {
           if (isShop) delete state.shopping[item.id];
           else state.shopping[item.id] = true;
-          saveState(); render(); showToast(isShop ? 'Removed from shopping list' : 'Added to shopping list');
+          saveState(); render();
+          showToast(isShop ? 'Removed from list' : 'Added to shopping list');
         },
       }, isShop ? '✓ List' : '+ List'),
       el('button', {
-        class: 'action-btn fav' + (isFav ? ' active' : ''),
-        title: 'Toggle favorite',
-        onclick: () => {
-          if (isFav) delete state.favorites[item.id];
-          else state.favorites[item.id] = true;
-          saveState(); render(); showToast(isFav ? 'Removed from favorites' : 'Added to favorites');
-        },
-      }, isFav ? '♥' : '♡'),
-      el('button', {
         class: 'action-btn action-btn-add',
-        title: 'Add to current meal builder',
+        title: 'Add to meal builder',
         onclick: () => {
           state.meal.items.push(item.id);
           saveState(); render(); showToast('Added to meal');
@@ -1434,11 +1238,9 @@ function makeItemCard(item) {
   );
 }
 
-function renderItemsByCategory(meal) {
-  const items = getItemsForMeal(meal);
-  if (items.length === 0) {
-    return el('div', { class: 'empty' }, 'No items match your search or filters.');
-  }
+function renderItemsByCategory(mealKey) {
+  const items = getItemsForMeal(mealKey);
+  if (items.length === 0) return el('div', { class: 'empty' }, 'No items match your search or filters.');
 
   const byCat = {};
   for (const item of items) {
@@ -1450,14 +1252,13 @@ function renderItemsByCategory(meal) {
   const wrap = el('div');
   for (const cat of order) {
     if (!byCat[cat]) continue;
-    const block = el('div', { class: 'category-block' },
+    wrap.appendChild(el('div', { class: 'category-block' },
       el('h3', { class: 'category-title' },
         el('span', { class: 'category-pill cat-' + cat }, catLabel(cat)),
-        el('span', {}, byCat[cat].length + ' ' + (byCat[cat].length === 1 ? 'option' : 'options')),
+        el('span', {}, byCat[cat].length + ' option' + (byCat[cat].length === 1 ? '' : 's')),
       ),
       el('div', { class: 'item-grid' }, ...byCat[cat].map(makeItemCard)),
-    );
-    wrap.appendChild(block);
+    ));
   }
   return wrap;
 }
@@ -1465,7 +1266,7 @@ function renderItemsByCategory(meal) {
 function renderBreakfast() {
   return el('div', {},
     el('h2', { class: 'section-header' }, 'Breakfast'),
-    el('p', { class: 'section-sub' }, 'Marielys\'s structure: select the number of servings per category.'),
+    el('p', { class: 'section-sub' }, 'Marielys\'s structure: 2 carb + 2 fruit + 4 protein, optional 1 fat.'),
     el('div', { class: 'meal-targets' },
       el('span', { class: 'target-chip cat-carb' }, '2 × Carbs'),
       el('span', { class: 'target-chip cat-fruit' }, '2 × Fruit'),
@@ -1476,10 +1277,11 @@ function renderBreakfast() {
   );
 }
 
-function renderLunchDinner() {
+function renderLunchOrDinner(tabName) {
+  const label = tabName === 'lunch' ? 'Lunch' : 'Dinner';
   return el('div', {},
-    el('h2', { class: 'section-header' }, 'Lunch & Dinner'),
-    el('p', { class: 'section-sub' }, 'Select the number of servings per category — same structure for both meals.'),
+    el('h2', { class: 'section-header' }, label),
+    el('p', { class: 'section-sub' }, '4 carb + 5 protein + 1 vegetable, optional 1 fat.'),
     el('div', { class: 'meal-targets' },
       el('span', { class: 'target-chip cat-carb' }, '4 × Carbs'),
       el('span', { class: 'target-chip cat-protein' }, '5 × Protein'),
@@ -1495,11 +1297,8 @@ function renderSnackTab(combos, title, calLabel) {
     el('h2', { class: 'section-header' }, title),
     el('p', { class: 'section-sub' }, calLabel),
     el('div', { class: 'combo-list' },
-      ...combos.filter(c => !searchTerm || c.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1).map(c =>
-        el('div', { class: 'combo-card' },
-          el('div', { class: 'combo-bullet' }),
-          el('div', {}, c),
-        )
+      ...combos.filter(c => !searchTerm || c.toLowerCase().includes(searchTerm.toLowerCase())).map(c =>
+        el('div', { class: 'combo-card' }, el('div', { class: 'combo-bullet' }), el('div', {}, c))
       ),
     ),
   );
@@ -1508,16 +1307,14 @@ function renderSnackTab(combos, title, calLabel) {
 function renderPantry() {
   const wrap = el('div', {},
     el('h2', { class: 'section-header' }, 'Pantry & cooking'),
-    el('p', { class: 'section-sub' }, '"Free" items for cooking — use generously, all Casey-approved. No specific portion. Check off what you have.'),
+    el('p', { class: 'section-sub' }, '"Free" items — use generously, all Casey-approved. Check off what you have.'),
   );
   const grid = el('div', { class: 'pantry-grid' });
   for (const section in PANTRY) {
     const items = PANTRY[section];
-    const filtered = items.filter(i => !searchTerm || i.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 || section.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1);
+    const filtered = items.filter(i => !searchTerm || i.toLowerCase().includes(searchTerm.toLowerCase()) || section.toLowerCase().includes(searchTerm.toLowerCase()));
     if (filtered.length === 0) continue;
-    const sec = el('div', { class: 'pantry-section' },
-      el('h3', {}, section),
-    );
+    const sec = el('div', { class: 'pantry-section' }, el('h3', {}, section));
     const ul = el('ul');
     for (const item of filtered) {
       const key = section + '|' + item;
@@ -1526,8 +1323,7 @@ function renderPantry() {
         el('button', {
           class: 'pantry-check' + (checked ? ' checked' : ''),
           onclick: () => {
-            if (checked) delete state.pantryChecked[key];
-            else state.pantryChecked[key] = true;
+            if (checked) delete state.pantryChecked[key]; else state.pantryChecked[key] = true;
             saveState(); render();
           },
         }, '✓'),
@@ -1544,15 +1340,13 @@ function renderPantry() {
 function renderApprovedSnacks() {
   const wrap = el('div', {},
     el('h2', { class: 'section-header' }, 'Additional approved snacks'),
-    el('p', { class: 'section-sub' }, 'All Casey-approved brands and packaged items. Use as substitutes for regular snacks or emergency snacks.'),
+    el('p', { class: 'section-sub' }, 'All Casey-approved brands and packaged items.'),
   );
   for (const group in APPROVED_SNACKS) {
     const items = APPROVED_SNACKS[group];
-    const filtered = items.filter(it => !searchTerm || it.n.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1);
+    const filtered = items.filter(it => !searchTerm || it.n.toLowerCase().includes(searchTerm.toLowerCase()));
     if (filtered.length === 0) continue;
-    const block = el('div', { class: 'approved-group' },
-      el('h4', {}, group),
-    );
+    const block = el('div', { class: 'approved-group' }, el('h4', {}, group));
     const list = el('div', { class: 'approved-list' });
     for (const it of filtered) {
       list.appendChild(el('div', { class: 'approved-card' },
@@ -1575,10 +1369,10 @@ function renderRules() {
           el('h3', {}, '5 IN — eat daily'),
           el('ul', {},
             el('li', {}, el('strong', {}, 'Omega-3 fats: '), '≥ 2 g/day'),
-            el('li', {}, el('strong', {}, 'Probiotics: '), '≥ 3 servings/day of probiotic foods'),
+            el('li', {}, el('strong', {}, 'Probiotics: '), '≥ 3 servings/day'),
             el('li', {}, el('strong', {}, 'Micronutrients/Antioxidants: '), 'Colorful plant diversity + spices'),
             el('li', {}, el('strong', {}, 'Fiber: '), '> 50 g/day'),
-            el('li', {}, el('strong', {}, 'Protein: '), '≥ 30 g whole-food protein per meal'),
+            el('li', {}, el('strong', {}, 'Protein: '), '≥ 30 g per meal'),
           ),
         ),
         el('div', { class: 'in-out-card out-card' },
@@ -1586,7 +1380,7 @@ function renderRules() {
           el('ul', {},
             el('li', {}, el('strong', {}, 'Refined/added sugars '), 'of any kind'),
             el('li', {}, el('strong', {}, 'Refined grains '), 'of any kind'),
-            el('li', {}, el('strong', {}, 'Industrial seed oils: '), 'canola, soybean, corn, sunflower, safflower, cottonseed, palm, rapeseed, "vegetable oil"'),
+            el('li', {}, el('strong', {}, 'Industrial seed oils: '), 'canola, soybean, corn, sunflower, safflower, cottonseed, palm, rapeseed'),
           ),
         ),
       ),
@@ -1598,17 +1392,16 @@ function renderRules() {
         el('li', {}, 'Aim for organic always (or regeneratively grown).'),
         el('li', {}, 'No refined sugars and no "Added sugar" on the label.'),
         el('li', {}, 'ZERO refined industrial seed oils in the ingredient list.'),
-        el('li', {}, 'No refined grains: avoid "wheat flour," "oat flour," "white flour," "all-purpose flour."'),
-        el('li', {}, 'No artificial colorings: avoid anything listing "Red," "Yellow," "Blue."'),
+        el('li', {}, 'No refined grains: avoid "wheat flour," "oat flour," "white flour."'),
+        el('li', {}, 'No artificial colorings.'),
         el('li', {}, 'No "natural flavors" unless the brand specifies the source.'),
-        el('li', {}, 'Don\'t buy foods with ingredients you can\'t pronounce or visualize.'),
-        el('li', {}, 'Frozen is OK for anything as long as it adheres to these rules.'),
+        el('li', {}, 'Frozen is OK as long as it adheres to these rules.'),
       ),
     ),
     el('div', { class: 'rule-block' },
       el('h2', {}, 'Animal product rules'),
       el('ul', {},
-        el('li', {}, el('strong', {}, 'Meat & poultry: '), 'organic + grass-fed/pasture-raised/regenerative. (Organic alone isn\'t enough — animals can still be fed corn/grain.)'),
+        el('li', {}, el('strong', {}, 'Meat & poultry: '), 'organic + grass-fed/pasture-raised/regenerative.'),
         el('li', {}, el('strong', {}, 'Fish: '), 'sustainably wild-caught; canned in olive oil or water only.'),
         el('li', {}, el('strong', {}, 'Dairy: '), 'organic + grass-fed/pasture-raised.'),
         el('li', {}, el('strong', {}, 'Eggs: '), 'organic + pasture-raised (cage-free does NOT count).'),
@@ -1616,17 +1409,17 @@ function renderRules() {
     ),
     el('div', { class: 'rule-block' },
       el('h2', {}, 'Allowed cooking fats'),
-      el('p', {}, 'Extra virgin olive oil · Avocado oil · Coconut oil · Ghee (clarified butter) · Grass-fed beef tallow · Pasture-raised lard'),
+      el('p', {}, 'Extra virgin olive oil · Avocado oil · Coconut oil · Ghee · Grass-fed beef tallow · Pasture-raised lard'),
     ),
     el('div', { class: 'rule-block' },
-      el('h2', {}, 'User overrides in this plan'),
-      el('p', {}, 'Items marked ⚠️ are NOT on Dr. Casey\'s list but were kept based on your decisions:'),
+      el('h2', {}, 'Manually added items'),
+      el('p', {}, 'Items marked ✎ Manual are not on Dr. Casey\'s list but were kept based on your decisions:'),
       el('ul', {},
-        el('li', {}, 'Ezekiel sprouted bread (cleanest grain bread option)'),
+        el('li', {}, 'Ezekiel sprouted bread'),
         el('li', {}, 'Rolled / steel-cut oats (organic, no instant)'),
-        el('li', {}, '1% milk (alternative to grass-fed whole)'),
+        el('li', {}, '1% milk'),
         el('li', {}, 'Quinoa (pseudograin)'),
-        el('li', {}, 'Sweet potato (batata), malanga, yautía (viandas not Casey-named)'),
+        el('li', {}, 'Sweet potato (batata), malanga, yautía'),
         el('li', {}, 'Tostón / plantain (air-fried or fried in approved oils only)'),
         el('li', {}, 'Mushrooms (organic only)'),
         el('li', {}, 'Chayote (organic only)'),
@@ -1635,90 +1428,175 @@ function renderRules() {
   );
 }
 
+function renderMyMeals() {
+  const types = ['breakfast', 'lunch', 'dinner'];
+  const typeLabels = { breakfast: '🍳 Breakfast', lunch: '🥗 Lunch', dinner: '🍽 Dinner' };
+  const wrap = el('div', {},
+    el('h2', { class: 'section-header' }, 'My Meals'),
+    el('p', { class: 'section-sub' }, 'Your saved meals. Tap Load to bring a meal back into the builder.'),
+  );
+
+  const hasMeals = state.savedMeals.length > 0;
+  if (!hasMeals) {
+    wrap.appendChild(el('div', { class: 'empty' }, 'No saved meals yet. Build a meal and tap "Save Meal" to store it here.'));
+    return wrap;
+  }
+
+  for (const type of types) {
+    const meals = state.savedMeals.filter(m => m.type === type);
+    if (meals.length === 0) continue;
+    const section = el('div', { class: 'my-meals-section' },
+      el('h3', { class: 'my-meals-type-header' }, typeLabels[type]),
+    );
+    for (const meal of meals) {
+      const itemNames = meal.items
+        .map(id => ITEMS.find(i => i.id === id))
+        .filter(Boolean)
+        .map(i => i.name);
+      const preview = itemNames.length > 4
+        ? itemNames.slice(0, 4).join(', ') + ` +${itemNames.length - 4} more`
+        : itemNames.join(', ');
+
+      section.appendChild(el('div', { class: 'saved-meal-card' },
+        el('div', { class: 'saved-meal-info' },
+          el('div', { class: 'saved-meal-name' }, meal.name),
+          el('div', { class: 'saved-meal-items' }, preview || 'No items'),
+        ),
+        el('div', { class: 'saved-meal-actions' },
+          el('button', {
+            class: 'load-meal-btn',
+            onclick: () => {
+              state.meal.type = meal.type;
+              state.meal.items = [...meal.items];
+              saveState();
+              panelView = 'meal';
+              if (window.innerWidth < 1024) togglePanel(true);
+              render();
+              showToast('Meal loaded into builder');
+            }
+          }, 'Load'),
+          el('button', {
+            class: 'delete-meal-btn',
+            onclick: () => {
+              if (confirm('Delete "' + meal.name + '"?')) {
+                state.savedMeals = state.savedMeals.filter(m => m.id !== meal.id);
+                saveState(); render();
+                showToast('Meal deleted');
+              }
+            }
+          }, 'Delete'),
+        ),
+      ));
+    }
+    wrap.appendChild(section);
+  }
+  return wrap;
+}
+
 function renderMain() {
   const main = document.getElementById('main');
   main.innerHTML = '';
   let content;
   switch (activeTab) {
-    case 'breakfast': content = renderBreakfast(); break;
-    case 'lunch_dinner': content = renderLunchDinner(); break;
-    case 'am_snack': content = renderSnackTab(AM_SNACKS, 'AM Snack', '≈ 220 cal, 11–18 g carbs, 8–15 g protein'); break;
-    case 'pm_snack': content = renderSnackTab(PM_SNACKS, 'PM Snack', '≈ 160 cal'); break;
-    case 'pantry': content = renderPantry(); break;
-    case 'snacks': content = renderApprovedSnacks(); break;
-    case 'rules': content = renderRules(); break;
+    case 'breakfast':  content = renderBreakfast(); break;
+    case 'lunch':      content = renderLunchOrDinner('lunch'); break;
+    case 'dinner':     content = renderLunchOrDinner('dinner'); break;
+    case 'am_snack':   content = renderSnackTab(AM_SNACKS, 'AM Snack', '≈ 220 cal, 11–18 g carbs, 8–15 g protein'); break;
+    case 'pm_snack':   content = renderSnackTab(PM_SNACKS, 'PM Snack', '≈ 160 cal'); break;
+    case 'pantry':     content = renderPantry(); break;
+    case 'snacks':     content = renderApprovedSnacks(); break;
+    case 'rules':      content = renderRules(); break;
+    case 'my_meals':   content = renderMyMeals(); break;
+    default:           content = renderBreakfast();
   }
   main.appendChild(content);
 }
 
 function renderMealBuilder() {
   const wrap = el('div');
+
   const select = el('select', {
     onchange: (e) => { state.meal.type = e.target.value; saveState(); render(); }
   },
     el('option', { value: 'breakfast' }, 'Breakfast'),
-    el('option', { value: 'lunch_dinner' }, 'Lunch or Dinner'),
+    el('option', { value: 'lunch' }, 'Lunch'),
+    el('option', { value: 'dinner' }, 'Dinner'),
   );
   select.value = state.meal.type;
   wrap.appendChild(el('div', { class: 'meal-selector' }, select));
 
   const targets = MEAL_TARGETS[state.meal.type];
-  const tally = { carb: 0, protein: 0, fruit: 0, vegetable: 0, fat: 0 };
+  const tally = {};
   const items = state.meal.items.map(id => ITEMS.find(i => i.id === id)).filter(Boolean);
-
-  for (const it of items) {
-    tally[it.category] = (tally[it.category] || 0) + 1;
-  }
+  for (const it of items) tally[it.category] = (tally[it.category] || 0) + 1;
 
   const progressWrap = el('div', { class: 'meal-target-row' });
-  const cats = ['carb', 'fruit', 'protein', 'vegetable', 'fat'];
-  for (const cat of cats) {
+  for (const cat of ['carb', 'fruit', 'protein', 'vegetable', 'fat']) {
     if (!(cat in targets)) continue;
     const target = targets[cat];
-    const current = tally[cat];
+    const current = tally[cat] || 0;
     const pct = Math.min(100, (current / target) * 100);
-    const isComplete = current >= target;
+    const done = current >= target;
     progressWrap.appendChild(el('div', { class: 'meal-progress cat-' + cat },
       el('span', { class: 'label' }, catLabel(cat)),
-      el('div', { class: 'bar' },
-        el('div', { class: 'fill', style: 'width: ' + pct + '%' }),
-      ),
-      el('span', { class: 'nums' + (isComplete ? ' complete' : '') }, current + '/' + target + (isComplete ? ' ✓' : '')),
+      el('div', { class: 'bar' }, el('div', { class: 'fill', style: 'width:' + pct + '%' })),
+      el('span', { class: 'nums' + (done ? ' complete' : '') }, current + '/' + target + (done ? ' ✓' : '')),
     ));
   }
   wrap.appendChild(progressWrap);
 
   if (items.length === 0) {
-    wrap.appendChild(el('div', { class: 'empty-state' }, 'Click "+ Meal" on any item to start building.'));
+    wrap.appendChild(el('div', { class: 'empty-state' }, 'Tap "+ Meal" on any item to start building.'));
   } else {
     const list = el('div', { class: 'panel-list' });
     items.forEach((it, idx) => {
       list.appendChild(el('div', { class: 'panel-item' },
-        el('span', { class: 'category-pill cat-' + it.category, style: 'font-size:9px;padding:1px 6px' }, catLabel(it.category)[0]),
+        el('span', { class: 'category-pill cat-' + it.category, style: 'font-size:9px;padding:1px 6px;flex-shrink:0' }, catLabel(it.category)[0]),
         el('span', { class: 'name' }, it.name),
         el('span', { class: 'portion' }, it.portion),
         el('button', {
           class: 'panel-item-remove',
-          title: 'Remove',
-          onclick: () => {
-            state.meal.items.splice(idx, 1);
-            saveState(); render();
-          }
+          onclick: () => { state.meal.items.splice(idx, 1); saveState(); render(); }
         }, '×'),
       ));
     });
     wrap.appendChild(list);
-
     wrap.appendChild(el('button', {
       class: 'clear-all',
-      onclick: () => {
-        if (confirm('Clear all items from meal builder?')) {
-          state.meal.items = [];
-          saveState(); render();
-        }
-      }
+      onclick: () => { if (confirm('Clear meal builder?')) { state.meal.items = []; saveState(); render(); } }
     }, 'Clear meal'));
   }
+
+  // Save meal form
+  const nameInput = el('input', {
+    class: 'save-meal-input',
+    type: 'text',
+    placeholder: 'e.g. My usual breakfast',
+    value: state.meal.saveName || '',
+    oninput: (e) => { state.meal.saveName = e.target.value; },
+  });
+  wrap.appendChild(el('div', { class: 'save-meal-form' },
+    el('label', {}, 'Save this meal as'),
+    nameInput,
+    el('button', {
+      class: 'save-meal-btn',
+      onclick: () => {
+        const name = (state.meal.saveName || '').trim();
+        if (!name) { showToast('Enter a name first'); return; }
+        if (state.meal.items.length === 0) { showToast('Add items first'); return; }
+        state.savedMeals.push({
+          id: Date.now().toString(),
+          name,
+          type: state.meal.type,
+          items: [...state.meal.items],
+          createdAt: Date.now(),
+        });
+        state.meal.saveName = '';
+        saveState(); render();
+        showToast('Meal saved!');
+      }
+    }, '💾 Save Meal'),
+  ));
 
   return wrap;
 }
@@ -1727,10 +1605,9 @@ function renderShoppingList() {
   const wrap = el('div');
   const ids = Object.keys(state.shopping);
   if (ids.length === 0) {
-    wrap.appendChild(el('div', { class: 'empty-state' }, 'Tap "+ List" on any item to add to shopping list.'));
+    wrap.appendChild(el('div', { class: 'empty-state' }, 'Tap "+ List" on any item to add.'));
     return wrap;
   }
-
   const byCat = {};
   for (const id of ids) {
     const it = ITEMS.find(i => i.id === id);
@@ -1738,123 +1615,80 @@ function renderShoppingList() {
     if (!byCat[it.category]) byCat[it.category] = [];
     byCat[it.category].push(it);
   }
-
   for (const cat in byCat) {
-    wrap.appendChild(el('h4', { style: 'margin: 12px 0 6px; font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;' }, catLabel(cat)));
-    const list = el('div', { class: 'panel-list', style: 'max-height: none' });
+    wrap.appendChild(el('h4', { style: 'margin:12px 0 6px;font-size:12px;text-transform:uppercase;color:var(--text-muted);letter-spacing:.05em' }, catLabel(cat)));
+    const list = el('div', { class: 'panel-list', style: 'max-height:none' });
     for (const it of byCat[cat]) {
       list.appendChild(el('div', { class: 'panel-item' },
         el('span', { class: 'name' }, (it.brand ? it.brand + ' — ' : '') + it.name),
         el('span', { class: 'portion' }, it.portion),
-        el('button', {
-          class: 'panel-item-remove',
-          title: 'Remove',
-          onclick: () => {
-            delete state.shopping[it.id];
-            saveState(); render();
-          }
-        }, '×'),
+        el('button', { class: 'panel-item-remove', onclick: () => { delete state.shopping[it.id]; saveState(); render(); } }, '×'),
       ));
     }
     wrap.appendChild(list);
   }
-
   wrap.appendChild(el('button', {
     class: 'clear-all',
-    onclick: () => {
-      if (confirm('Clear shopping list?')) {
-        state.shopping = {};
-        saveState(); render();
-      }
-    }
+    onclick: () => { if (confirm('Clear shopping list?')) { state.shopping = {}; saveState(); render(); } }
   }, 'Clear list'));
-
-  return wrap;
-}
-
-function renderFavorites() {
-  const wrap = el('div');
-  const ids = Object.keys(state.favorites);
-  if (ids.length === 0) {
-    wrap.appendChild(el('div', { class: 'empty-state' }, 'Tap ♡ on any item to favorite it.'));
-    return wrap;
-  }
-
-  const list = el('div', { class: 'panel-list', style: 'max-height: none' });
-  for (const id of ids) {
-    const it = ITEMS.find(i => i.id === id);
-    if (!it) continue;
-    list.appendChild(el('div', { class: 'panel-item' },
-      el('span', { class: 'category-pill cat-' + it.category, style: 'font-size:9px;padding:1px 6px' }, catLabel(it.category)[0]),
-      el('span', { class: 'name' }, it.name),
-      el('span', { class: 'portion' }, it.portion),
-      el('button', {
-        class: 'panel-item-remove',
-        title: 'Remove',
-        onclick: () => {
-          delete state.favorites[it.id];
-          saveState(); render();
-        }
-      }, '×'),
-    ));
-  }
-  wrap.appendChild(list);
   return wrap;
 }
 
 function renderPanel() {
   const p = document.getElementById('panel');
   p.innerHTML = '';
-
-  const tabs = el('div', { class: 'panel-tabs' },
+  p.appendChild(el('div', { class: 'panel-tabs' },
     el('button', { class: 'panel-tab' + (panelView === 'meal' ? ' active' : ''), onclick: () => { panelView = 'meal'; render(); } }, 'Meal Builder'),
     el('button', { class: 'panel-tab' + (panelView === 'shopping' ? ' active' : ''), onclick: () => { panelView = 'shopping'; render(); } }, 'Shopping'),
-    el('button', { class: 'panel-tab' + (panelView === 'favorites' ? ' active' : ''), onclick: () => { panelView = 'favorites'; render(); } }, 'Favorites'),
-  );
-  p.appendChild(tabs);
-
+  ));
   if (panelView === 'meal') p.appendChild(renderMealBuilder());
-  else if (panelView === 'shopping') p.appendChild(renderShoppingList());
-  else p.appendChild(renderFavorites());
+  else p.appendChild(renderShoppingList());
 }
 
 function renderHeader() {
-  document.getElementById('favCount').textContent = Object.keys(state.favorites).length;
   document.getElementById('shopCount').textContent = Object.keys(state.shopping).length;
 
   const filterRow = document.getElementById('filterRow');
   filterRow.innerHTML = '';
+
+  const hasActive = activeFilters.size > 0;
+  const toggleBtn = el('button', {
+    class: 'filter-toggle-btn' + (hasActive ? ' has-active' : ''),
+    onclick: () => { filtersExpanded = !filtersExpanded; render(); }
+  }, (filtersExpanded ? '▲' : '▼') + ' Filters' + (hasActive ? ' (' + activeFilters.size + ')' : ''));
+  filterRow.appendChild(toggleBtn);
+
+  const chipsWrap = el('div', { class: 'filter-chips-wrap' + (filtersExpanded ? '' : ' collapsed') });
   const cats = ['carb', 'protein', 'fruit', 'vegetable', 'fat'];
   for (const cat of cats) {
-    const chip = el('button', {
+    chipsWrap.appendChild(el('button', {
       class: 'filter-chip cat-' + cat + (activeFilters.has(cat) ? ' active' : ''),
-      onclick: () => {
-        if (activeFilters.has(cat)) activeFilters.delete(cat);
-        else activeFilters.add(cat);
-        render();
-      }
-    }, catLabel(cat));
-    filterRow.appendChild(chip);
+      onclick: () => { if (activeFilters.has(cat)) activeFilters.delete(cat); else activeFilters.add(cat); render(); }
+    }, catLabel(cat)));
   }
-  filterRow.appendChild(el('button', {
-    class: 'filter-chip' + (hideOverrides ? ' active' : ''),
-    title: 'Toggle visibility of user override items (⚠️)',
-    onclick: () => { hideOverrides = !hideOverrides; render(); }
-  }, hideOverrides ? '⚠️ Overrides hidden' : '⚠️ Show overrides'));
-
-  if (activeFilters.size > 0 || hideOverrides || searchTerm) {
-    filterRow.appendChild(el('button', {
+  if (hasActive || searchTerm) {
+    chipsWrap.appendChild(el('button', {
       class: 'filter-chip',
       style: 'background:transparent;color:var(--protein);border-color:var(--protein)',
-      onclick: () => {
-        activeFilters.clear();
-        hideOverrides = false;
-        searchTerm = '';
-        document.getElementById('searchInput').value = '';
-        render();
-      }
-    }, '× Clear all'));
+      onclick: () => { activeFilters.clear(); searchTerm = ''; document.getElementById('searchInput').value = ''; render(); }
+    }, '× Clear'));
   }
+  filterRow.appendChild(chipsWrap);
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  // sync desktop tabs
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tab);
+  });
+  // sync bottom nav
+  document.querySelectorAll('.bottom-nav-item[data-tab]').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+  // deactivate More btn if a real tab is set
+  document.getElementById('moreNavBtn').classList.remove('active');
+  render();
 }
 
 function render() {
@@ -1877,23 +1711,42 @@ function togglePanel(show) {
   }
 }
 
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  searchTerm = e.target.value;
-  render();
+// Desktop tab clicks
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => setTab(t.dataset.tab));
 });
 
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    activeTab = t.dataset.tab;
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    render();
+// Bottom nav item clicks
+document.querySelectorAll('.bottom-nav-item[data-tab]').forEach(b => {
+  b.addEventListener('click', () => setTab(b.dataset.tab));
+});
+
+// More button
+document.getElementById('moreNavBtn').addEventListener('click', () => {
+  document.getElementById('moreOverlay').classList.add('open');
+  document.getElementById('moreNavBtn').classList.add('active');
+});
+
+// More overlay: close on background click
+document.getElementById('moreOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('moreOverlay') || e.target.classList.contains('more-sheet')) return;
+  // clicked a more-item handled below, or bg
+  if (e.target === document.getElementById('moreOverlay')) closeMoreDrawer();
+});
+
+document.querySelectorAll('.more-item').forEach(btn => {
+  btn.addEventListener('click', () => {
+    closeMoreDrawer();
+    setTab(btn.dataset.tab);
   });
 });
 
-document.getElementById('favBtn').addEventListener('click', () => {
-  panelView = 'favorites';
-  if (window.innerWidth < 1024) togglePanel(true);
+function closeMoreDrawer() {
+  document.getElementById('moreOverlay').classList.remove('open');
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  searchTerm = e.target.value;
   render();
 });
 
@@ -1914,53 +1767,34 @@ document.getElementById('panelWrap').addEventListener('click', (e) => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') togglePanel(false);
+  if (e.key === 'Escape') { togglePanel(false); closeMoreDrawer(); }
 });
 
 loadState();
 render();
 
-
-// ── Service Worker registration ──────────────────────────
+// ── Service Worker ──
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
-  });
+  window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(() => {}); });
 }
 
-// ── PWA Install prompt ───────────────────────────────────
+// ── PWA Install prompt ──
 let deferredPrompt = null;
 const banner = document.getElementById('install-banner');
-const installBtn = document.getElementById('install-btn');
-const dismissBtn = document.getElementById('install-dismiss');
-
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  // Only show if not already installed and not dismissed this session
-  if (!sessionStorage.getItem('install-dismissed')) {
-    banner.classList.add('visible');
-  }
+  e.preventDefault(); deferredPrompt = e;
+  if (!sessionStorage.getItem('install-dismissed')) banner.classList.add('visible');
 });
-
-installBtn.addEventListener('click', async () => {
+document.getElementById('install-btn').addEventListener('click', async () => {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  banner.classList.remove('visible');
+  await deferredPrompt.userChoice;
+  deferredPrompt = null; banner.classList.remove('visible');
 });
-
-dismissBtn.addEventListener('click', () => {
-  banner.classList.remove('visible');
-  sessionStorage.setItem('install-dismissed', '1');
+document.getElementById('install-dismiss').addEventListener('click', () => {
+  banner.classList.remove('visible'); sessionStorage.setItem('install-dismissed', '1');
 });
-
-window.addEventListener('appinstalled', () => {
-  banner.classList.remove('visible');
-  deferredPrompt = null;
-});
-
+window.addEventListener('appinstalled', () => { banner.classList.remove('visible'); deferredPrompt = null; });
 </script>
 </body>
 </html>
