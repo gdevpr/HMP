@@ -66,11 +66,19 @@
   .header-row {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 10px 16px;
+    padding: 10px 16px 0;
     display: flex;
     align-items: center;
     gap: 10px;
   }
+
+  .search-row {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 8px 16px 0;
+  }
+
+  .search-row .search-wrap { width: 100%; }
 
   .title {
     font-size: 17px;
@@ -151,35 +159,12 @@
     align-items: center;
   }
 
-  .filter-toggle-btn {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 0 12px;
-    height: 32px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    color: var(--text-muted);
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: inherit;
-    touch-action: manipulation;
-  }
-  .filter-toggle-btn.has-active {
-    background: var(--primary-light);
-    border-color: var(--primary);
-    color: var(--primary);
-  }
-
   .filter-chips-wrap {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
     align-items: center;
   }
-  .filter-chips-wrap.collapsed { display: none; }
 
   .filter-chip {
     background: var(--bg);
@@ -253,19 +238,28 @@
   .section-header { margin: 0 0 8px; font-size: 18px; font-weight: 700; }
   .section-sub { color: var(--text-muted); font-size: 13px; margin: 0 0 16px; }
 
-  .meal-targets {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 14px;
-    margin-bottom: 16px;
+  .meal-header {
+    margin: 0 0 16px;
+  }
+  .meal-header-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .meal-header-structure {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
-    font-size: 13px;
+    font-size: 12px;
+    color: var(--text-muted);
   }
-
-  .target-chip { background: var(--bg); border-radius: var(--radius-sm); padding: 3px 10px; font-weight: 500; }
+  .meal-header-structure .by {
+    font-size: 11px;
+    font-style: italic;
+    margin-right: 2px;
+  }
+  .target-chip { border-radius: var(--radius-sm); padding: 3px 10px; font-weight: 600; font-size: 12px; }
   .target-chip.cat-carb { background: var(--carb-light); color: var(--carb); }
   .target-chip.cat-protein { background: var(--protein-light); color: var(--protein); }
   .target-chip.cat-fruit { background: var(--fruit-light); color: var(--fruit); }
@@ -705,11 +699,14 @@
   <div class="header-row">
     <h1 class="title">Healthy Eating Plan</h1>
     <span class="badge-5in3out" title="Dr. Casey's 5 IN / 3 OUT framework">5 IN · 3 OUT</span>
+    <div style="flex:1"></div>
+    <button class="toolbar-btn" id="shopBtn">🛒 <span class="count" id="shopCount">0</span></button>
+  </div>
+  <div class="search-row">
     <div class="search-wrap">
       <span class="search-icon">⌕</span>
       <input id="searchInput" type="search" class="search-input" placeholder="Search foods…">
     </div>
-    <button class="toolbar-btn" id="shopBtn">🛒 <span class="count" id="shopCount">0</span></button>
   </div>
   <div class="filter-row" id="filterRow"></div>
   <div class="tabs" id="tabs">
@@ -1148,7 +1145,6 @@ let activeTab = 'breakfast';
 let searchTerm = '';
 let activeFilters = new Set();
 let panelView = 'meal';
-let filtersExpanded = false;
 
 function el(tag, attrs, ...children) {
   attrs = attrs || {};
@@ -1280,13 +1276,15 @@ function renderBreakfast() {
 function renderLunchOrDinner(tabName) {
   const label = tabName === 'lunch' ? 'Lunch' : 'Dinner';
   return el('div', {},
-    el('h2', { class: 'section-header' }, label),
-    el('p', { class: 'section-sub' }, '4 carb + 5 protein + 1 vegetable, optional 1 fat.'),
-    el('div', { class: 'meal-targets' },
-      el('span', { class: 'target-chip cat-carb' }, '4 × Carbs'),
-      el('span', { class: 'target-chip cat-protein' }, '5 × Protein'),
-      el('span', { class: 'target-chip cat-vegetable' }, '1 × Vegetable'),
-      el('span', { class: 'target-chip cat-fat' }, '1 × Fat (optional)'),
+    el('div', { class: 'meal-header' },
+      el('h2', { class: 'meal-header-title' }, label),
+      el('div', { class: 'meal-header-structure' },
+        el('span', { class: 'by' }, 'Marielys:'),
+        el('span', { class: 'target-chip cat-carb' }, '4 × Carbs'),
+        el('span', { class: 'target-chip cat-protein' }, '5 × Protein'),
+        el('span', { class: 'target-chip cat-vegetable' }, '1 × Vegetable'),
+        el('span', { class: 'target-chip cat-fat' }, '1 × Fat (opt)'),
+      ),
     ),
     renderItemsByCategory('lunch_dinner'),
   );
@@ -1652,13 +1650,7 @@ function renderHeader() {
   filterRow.innerHTML = '';
 
   const hasActive = activeFilters.size > 0;
-  const toggleBtn = el('button', {
-    class: 'filter-toggle-btn' + (hasActive ? ' has-active' : ''),
-    onclick: () => { filtersExpanded = !filtersExpanded; render(); }
-  }, (filtersExpanded ? '▲' : '▼') + ' Filters' + (hasActive ? ' (' + activeFilters.size + ')' : ''));
-  filterRow.appendChild(toggleBtn);
-
-  const chipsWrap = el('div', { class: 'filter-chips-wrap' + (filtersExpanded ? '' : ' collapsed') });
+  const chipsWrap = el('div', { class: 'filter-chips-wrap' });
   const cats = ['carb', 'protein', 'fruit', 'vegetable', 'fat'];
   for (const cat of cats) {
     chipsWrap.appendChild(el('button', {
@@ -1729,9 +1721,8 @@ document.getElementById('moreNavBtn').addEventListener('click', () => {
 
 // More overlay: close on background click
 document.getElementById('moreOverlay').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('moreOverlay') || e.target.classList.contains('more-sheet')) return;
-  // clicked a more-item handled below, or bg
-  if (e.target === document.getElementById('moreOverlay')) closeMoreDrawer();
+  // close when tapping the dark backdrop (not the sheet itself)
+  if (!e.target.closest('.more-sheet')) closeMoreDrawer();
 });
 
 document.querySelectorAll('.more-item').forEach(btn => {
