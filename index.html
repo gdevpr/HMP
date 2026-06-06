@@ -75,7 +75,7 @@
   .search-row {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 8px 16px 0;
+    padding: 8px 16px 8px;
   }
 
   .search-row .search-wrap { width: 100%; }
@@ -238,27 +238,42 @@
   .section-header { margin: 0 0 8px; font-size: 18px; font-weight: 700; }
   .section-sub { color: var(--text-muted); font-size: 13px; margin: 0 0 16px; }
 
-  .meal-header {
-    margin: 0 0 16px;
-  }
-  .meal-header-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 0 6px;
-  }
-  .meal-header-structure {
+  /* structure dot-row card */
+  .structure-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    margin-bottom: 16px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+  }
+  .structure-by {
+    font-size: 11px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-right: 2px;
+  }
+  .structure-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     font-size: 12px;
     color: var(--text-muted);
   }
-  .meal-header-structure .by {
-    font-size: 11px;
-    font-style: italic;
-    margin-right: 2px;
+  .structure-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
+  .structure-sep {
+    color: var(--border);
+    font-size: 14px;
+  }
+  /* keep target-chip for meal builder progress */
   .target-chip { border-radius: var(--radius-sm); padding: 3px 10px; font-weight: 600; font-size: 12px; }
   .target-chip.cat-carb { background: var(--carb-light); color: var(--carb); }
   .target-chip.cat-protein { background: var(--protein-light); color: var(--protein); }
@@ -486,15 +501,21 @@
   .pantry-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
   .pantry-section h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700; color: var(--pantry); }
   .pantry-section ul { margin: 0; padding: 0; list-style: none; }
-  .pantry-section li { padding: 4px 0; font-size: 13px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .pantry-section li { padding: 6px 0; font-size: 13px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; min-height: 40px; }
   .pantry-section li:last-child { border-bottom: none; }
-  .pantry-check {
-    background: none; border: 1px solid var(--border); border-radius: 4px;
-    width: 20px; height: 20px; cursor: pointer; flex-shrink: 0; padding: 0;
+  .pantry-add-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    width: 28px; height: 28px;
+    cursor: pointer; flex-shrink: 0; padding: 0;
     display: inline-flex; align-items: center; justify-content: center;
-    font-family: inherit; color: transparent; touch-action: manipulation;
+    font-family: inherit; font-size: 15px; color: var(--text-muted);
+    touch-action: manipulation; margin-left: auto;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
-  .pantry-check.checked { background: #06b6d4; border-color: #06b6d4; color: white; }
+  .pantry-add-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .pantry-add-btn.on-list { background: #0d9488; border-color: #0d9488; color: white; }
 
   .rules-page { display: grid; gap: 16px; }
   .rule-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
@@ -560,10 +581,16 @@
     touch-action: manipulation;
     padding: 6px 4px 4px;
   }
-  .bottom-nav-item .nav-icon { font-size: 22px; line-height: 1; }
+  .bottom-nav-item .nav-icon-wrap { display: flex; align-items: center; justify-content: center; min-width: 44px; }
+  .bottom-nav-item .nav-icon { font-size: 20px; line-height: 1; }
   .bottom-nav-item .nav-label { font-size: 10px; font-weight: 500; line-height: 1; }
   .bottom-nav-item.active { color: var(--primary); }
-  .bottom-nav-item.active .nav-label { font-weight: 700; }
+  .bottom-nav-item.active .nav-icon-wrap {
+    background: var(--primary-light);
+    border-radius: 12px;
+    padding: 2px 10px;
+  }
+  .bottom-nav-item.active .nav-label { font-weight: 700; color: var(--primary); }
 
   /* ── More Drawer ── */
   .more-overlay {
@@ -605,15 +632,16 @@
     right: 16px;
     background: var(--primary);
     color: white; border: none;
-    border-radius: 999px;
-    padding: 0 20px;
-    height: 48px;
-    font-size: 14px; font-weight: 600;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
     cursor: pointer; box-shadow: var(--shadow-lg);
     z-index: 50;
-    align-items: center; gap: 8px;
+    align-items: center; justify-content: center;
     font-family: inherit;
     touch-action: manipulation;
+    line-height: 1;
   }
 
   /* ── Mobile panel slide-up ── */
@@ -735,29 +763,29 @@
   <small>Shopping list and meal builder save automatically in this browser.</small></p>
 </footer>
 
-<button class="mobile-fab" id="mobileFab">🍽 Meal Builder</button>
+<button class="mobile-fab" id="mobileFab" title="Meal Builder">🍽</button>
 
 <!-- Bottom Nav (mobile) -->
 <nav class="bottom-nav" id="bottomNav">
   <div class="bottom-nav-inner">
     <button class="bottom-nav-item active" data-tab="breakfast">
-      <span class="nav-icon">🍳</span>
+      <span class="nav-icon-wrap"><span class="nav-icon">🍳</span></span>
       <span class="nav-label">Breakfast</span>
     </button>
     <button class="bottom-nav-item" data-tab="lunch">
-      <span class="nav-icon">🥗</span>
+      <span class="nav-icon-wrap"><span class="nav-icon">🥗</span></span>
       <span class="nav-label">Lunch</span>
     </button>
     <button class="bottom-nav-item" data-tab="dinner">
-      <span class="nav-icon">🍽</span>
+      <span class="nav-icon-wrap"><span class="nav-icon">🍽</span></span>
       <span class="nav-label">Dinner</span>
     </button>
     <button class="bottom-nav-item" data-tab="my_meals">
-      <span class="nav-icon">📋</span>
+      <span class="nav-icon-wrap"><span class="nav-icon">📋</span></span>
       <span class="nav-label">My Meals</span>
     </button>
     <button class="bottom-nav-item" id="moreNavBtn">
-      <span class="nav-icon">•••</span>
+      <span class="nav-icon-wrap"><span class="nav-icon">•••</span></span>
       <span class="nav-label">More</span>
     </button>
   </div>
@@ -1122,7 +1150,6 @@ const STORAGE_KEY = 'mealPlan_v2';
 let state = {
   shopping: {},
   meal: { type: 'breakfast', items: [], saveName: '' },
-  pantryChecked: {},
   savedMeals: [],
 };
 
@@ -1261,30 +1288,31 @@ function renderItemsByCategory(mealKey) {
 
 function renderBreakfast() {
   return el('div', {},
-    el('h2', { class: 'section-header' }, 'Breakfast'),
-    el('p', { class: 'section-sub' }, 'Marielys\'s structure: 2 carb + 2 fruit + 4 protein, optional 1 fat.'),
-    el('div', { class: 'meal-targets' },
-      el('span', { class: 'target-chip cat-carb' }, '2 × Carbs'),
-      el('span', { class: 'target-chip cat-fruit' }, '2 × Fruit'),
-      el('span', { class: 'target-chip cat-protein' }, '4 × Protein'),
-      el('span', { class: 'target-chip cat-fat' }, '1 × Fat (optional)'),
+    el('div', { class: 'structure-card' },
+      el('span', { class: 'structure-by' }, 'Marielys'),
+      el('div', { class: 'structure-group' }, el('div', { class: 'structure-dot', style: 'background:var(--carb)' }), '2 Carbs'),
+      el('span', { class: 'structure-sep' }, '·'),
+      el('div', { class: 'structure-group' }, el('div', { class: 'structure-dot', style: 'background:var(--fruit)' }), '2 Fruit'),
+      el('span', { class: 'structure-sep' }, '·'),
+      el('div', { class: 'structure-group' }, el('div', { class: 'structure-dot', style: 'background:var(--protein)' }), '4 Protein'),
+      el('span', { class: 'structure-sep' }, '·'),
+      el('div', { class: 'structure-group' }, el('div', { class: 'structure-dot', style: 'background:var(--fat)' }), '1 Fat (opt)'),
     ),
     renderItemsByCategory('breakfast'),
   );
 }
 
 function renderLunchOrDinner(tabName) {
-  const label = tabName === 'lunch' ? 'Lunch' : 'Dinner';
   return el('div', {},
-    el('div', { class: 'meal-header' },
-      el('h2', { class: 'meal-header-title' }, label),
-      el('div', { class: 'meal-header-structure' },
-        el('span', { class: 'by' }, 'Marielys:'),
-        el('span', { class: 'target-chip cat-carb' }, '4 × Carbs'),
-        el('span', { class: 'target-chip cat-protein' }, '5 × Protein'),
-        el('span', { class: 'target-chip cat-vegetable' }, '1 × Vegetable'),
-        el('span', { class: 'target-chip cat-fat' }, '1 × Fat (opt)'),
-      ),
+    el('div', { class: 'structure-card' },
+      el('span', { class: 'structure-by' }, 'Marielys'),
+      el('div', { class: 'structure-group' }, el('div', { class: 'structure-dot', style: 'background:var(--carb)' }), '4 Carbs'),
+      el('span', { class: 'structure-sep' }, '·'),
+      el('div', { class: 'structure-group' }, el('div', { class: 'structure-dot', style: 'background:var(--protein)' }), '5 Protein'),
+      el('span', { class: 'structure-sep' }, '·'),
+      el('div', { class: 'structure-group' }, el('div', { class: 'structure-dot', style: 'background:var(--vegetable)' }), '1 Vegetable'),
+      el('span', { class: 'structure-sep' }, '·'),
+      el('div', { class: 'structure-group' }, el('div', { class: 'structure-dot', style: 'background:var(--fat)' }), '1 Fat (opt)'),
     ),
     renderItemsByCategory('lunch_dinner'),
   );
@@ -1305,7 +1333,7 @@ function renderSnackTab(combos, title, calLabel) {
 function renderPantry() {
   const wrap = el('div', {},
     el('h2', { class: 'section-header' }, 'Pantry & cooking'),
-    el('p', { class: 'section-sub' }, '"Free" items — use generously, all Casey-approved. Check off what you have.'),
+    el('p', { class: 'section-sub' }, '"Free" cooking staples — Casey-approved. Tap + to add to your shopping list.'),
   );
   const grid = el('div', { class: 'pantry-grid' });
   for (const section in PANTRY) {
@@ -1315,17 +1343,20 @@ function renderPantry() {
     const sec = el('div', { class: 'pantry-section' }, el('h3', {}, section));
     const ul = el('ul');
     for (const item of filtered) {
-      const key = section + '|' + item;
-      const checked = !!state.pantryChecked[key];
+      const shopKey = 'pantry|' + section + '|' + item;
+      const onList = !!state.shopping[shopKey];
       ul.appendChild(el('li', {},
+        el('span', { style: 'flex:1' }, item),
         el('button', {
-          class: 'pantry-check' + (checked ? ' checked' : ''),
+          class: 'pantry-add-btn' + (onList ? ' on-list' : ''),
+          title: onList ? 'Remove from shopping list' : 'Add to shopping list',
           onclick: () => {
-            if (checked) delete state.pantryChecked[key]; else state.pantryChecked[key] = true;
+            if (onList) delete state.shopping[shopKey];
+            else state.shopping[shopKey] = { name: item, section, isPantry: true };
             saveState(); render();
+            showToast(onList ? 'Removed from list' : 'Added to shopping list');
           },
-        }, '✓'),
-        el('span', {}, item),
+        }, onList ? '✓' : '+'),
       ));
     }
     sec.appendChild(ul);
@@ -1601,30 +1632,52 @@ function renderMealBuilder() {
 
 function renderShoppingList() {
   const wrap = el('div');
-  const ids = Object.keys(state.shopping);
-  if (ids.length === 0) {
-    wrap.appendChild(el('div', { class: 'empty-state' }, 'Tap "+ List" on any item to add.'));
+  const keys = Object.keys(state.shopping);
+  if (keys.length === 0) {
+    wrap.appendChild(el('div', { class: 'empty-state' }, 'Tap + on any item to add to your list.'));
     return wrap;
   }
+
+  // Separate food items from pantry items
+  const foodKeys = keys.filter(k => !k.startsWith('pantry|'));
+  const pantryKeys = keys.filter(k => k.startsWith('pantry|'));
+
+  // Food items grouped by category
   const byCat = {};
-  for (const id of ids) {
+  for (const id of foodKeys) {
     const it = ITEMS.find(i => i.id === id);
     if (!it) continue;
     if (!byCat[it.category]) byCat[it.category] = [];
-    byCat[it.category].push(it);
+    byCat[it.category].push({ key: id, it });
   }
   for (const cat in byCat) {
     wrap.appendChild(el('h4', { style: 'margin:12px 0 6px;font-size:12px;text-transform:uppercase;color:var(--text-muted);letter-spacing:.05em' }, catLabel(cat)));
     const list = el('div', { class: 'panel-list', style: 'max-height:none' });
-    for (const it of byCat[cat]) {
+    for (const { key, it } of byCat[cat]) {
       list.appendChild(el('div', { class: 'panel-item' },
         el('span', { class: 'name' }, (it.brand ? it.brand + ' — ' : '') + it.name),
         el('span', { class: 'portion' }, it.portion),
-        el('button', { class: 'panel-item-remove', onclick: () => { delete state.shopping[it.id]; saveState(); render(); } }, '×'),
+        el('button', { class: 'panel-item-remove', onclick: () => { delete state.shopping[key]; saveState(); render(); } }, '×'),
       ));
     }
     wrap.appendChild(list);
   }
+
+  // Pantry items grouped under one header
+  if (pantryKeys.length > 0) {
+    wrap.appendChild(el('h4', { style: 'margin:12px 0 6px;font-size:12px;text-transform:uppercase;color:var(--text-muted);letter-spacing:.05em' }, 'Pantry'));
+    const list = el('div', { class: 'panel-list', style: 'max-height:none' });
+    for (const key of pantryKeys) {
+      const entry = state.shopping[key];
+      const name = typeof entry === 'object' ? entry.name : key.split('|')[2];
+      list.appendChild(el('div', { class: 'panel-item' },
+        el('span', { class: 'name' }, name),
+        el('button', { class: 'panel-item-remove', onclick: () => { delete state.shopping[key]; saveState(); render(); } }, '×'),
+      ));
+    }
+    wrap.appendChild(list);
+  }
+
   wrap.appendChild(el('button', {
     class: 'clear-all',
     onclick: () => { if (confirm('Clear shopping list?')) { state.shopping = {}; saveState(); render(); } }
@@ -1670,15 +1723,12 @@ function renderHeader() {
 
 function setTab(tab) {
   activeTab = tab;
-  // sync desktop tabs
   document.querySelectorAll('.tab').forEach(t => {
     t.classList.toggle('active', t.dataset.tab === tab);
   });
-  // sync bottom nav
   document.querySelectorAll('.bottom-nav-item[data-tab]').forEach(b => {
     b.classList.toggle('active', b.dataset.tab === tab);
   });
-  // deactivate More btn if a real tab is set
   document.getElementById('moreNavBtn').classList.remove('active');
   render();
 }
